@@ -342,6 +342,13 @@ and finish_escaped_char v = parse
            else
              utf8_of_code v.buf x
          }
+  | 'U' (hex as a) (hex as b) (hex as c) (hex as d) (hex as e) (hex as f) (hex as g) (hex as h)
+         { let x =
+             (hex a lsl 28) lor (hex b lsl 24) lor (hex c lsl 20) lor (hex d lsl 16) lor
+             (hex e lsl 12) lor (hex f lsl  8) lor (hex g lsl  4) lor hex h
+           in
+           utf8_of_code v.buf x
+         }
   | _    { long_error "Invalid escape sequence" v lexbuf }
   | eof  { custom_error "Unexpected end of input" v lexbuf }
 
